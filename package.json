@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 5008",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && next build && pm2 restart simple-media-gallery",
     "start": "next start --port 5008",
     "lint": "eslint",
     "db:generate": "prisma generate",
