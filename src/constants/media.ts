@@ -63,3 +63,5 @@ export const LOCAL_STORAGE_KEYS = {
 } as const;
 
 export const MEDIA_SCAN_COMPLETE_EVENT = "media-scan-complete";
+
+export const VIDEO_PROGRESS_SAVE_INTERVAL_MS = 5000;
