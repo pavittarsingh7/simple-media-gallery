@@ -1,13 +1,21 @@
-import exifr from "exifr";
+import "server-only";
+
+import { readFile } from "fs/promises";
 import sharp from "sharp";
 import type { ImageMetadata } from "@/services/scanner/types";
+
+async function parseExif(filePath: string) {
+  const exifr = await import("exifr");
+  const buffer = await readFile(filePath);
+  return exifr.parse(buffer, { gps: true }).catch(() => null);
+}
 
 export async function extractImageMetadata(
   filePath: string
 ): Promise<ImageMetadata> {
   const [sharpMeta, exifData] = await Promise.all([
     sharp(filePath).metadata().catch(() => null),
-    exifr.parse(filePath, { gps: true }).catch(() => null),
+    parseExif(filePath),
   ]);
 
   const width = sharpMeta?.width ?? null;

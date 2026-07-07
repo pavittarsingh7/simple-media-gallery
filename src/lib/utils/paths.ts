@@ -4,7 +4,7 @@ import { IMAGE_EXTENSIONS, VIDEO_EXTENSIONS } from "@/constants/media";
 
 export function resolveMediaRoot(): string {
   const env = getEnv();
-  return path.resolve(process.cwd(), env.MEDIA_ROOT);
+  return path.resolve(/* turbopackIgnore: true */ process.cwd(), env.MEDIA_ROOT);
 }
 
 export function resolvePhotoPath(): string {
@@ -19,7 +19,7 @@ export function resolveVideoPath(): string {
 
 export function resolveThumbnailPath(): string {
   const env = getEnv();
-  return path.resolve(process.cwd(), env.THUMBNAIL_FOLDER);
+  return path.resolve(/* turbopackIgnore: true */ process.cwd(), env.THUMBNAIL_FOLDER);
 }
 
 export function isPathWithinRoot(filePath: string, rootPath: string): boolean {

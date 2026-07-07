@@ -19,7 +19,7 @@ const envSchema = z.object({
   RATE_LIMIT_MAX: z.coerce.number().default(100),
   RATE_LIMIT_WINDOW_MS: z.coerce.number().default(60000),
   NEXT_PUBLIC_APP_NAME: z.string().default("Media Gallery"),
-  NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
+  NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:5008"),
 });
 
 export type Env = z.infer<typeof envSchema>;

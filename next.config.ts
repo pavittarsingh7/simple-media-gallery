@@ -11,6 +11,18 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  output: "standalone",
+  serverExternalPackages: [
+    "exifr",
+    "sharp",
+    "pg",
+    "@prisma/client",
+    "@prisma/adapter-pg",
+    "fluent-ffmpeg",
+  ],
+  outputFileTracingIncludes: {
+    "/*": ["./src/generated/prisma/**/*"],
+  },
   images: {
     remotePatterns: [
       {
