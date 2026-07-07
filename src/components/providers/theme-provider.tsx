@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { ThemeProvider as NextThemesProvider, useTheme as useNextTheme } from "next-themes";
-import { LOCAL_STORAGE_KEYS } from "@/constants/media";
+import { LOCAL_STORAGE_KEYS, MEDIA_SCAN_COMPLETE_EVENT } from "@/constants/media";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
@@ -35,10 +35,16 @@ export function StatsProvider({ children }: { children: React.ReactNode }) {
   const [stats, setStats] = useState<AppStats>({ photos: 0, videos: 0, total: 0 });
 
   useEffect(() => {
-    fetch("/api/stats")
-      .then((r) => r.json())
-      .then(setStats)
-      .catch(() => {});
+    const loadStats = () => {
+      fetch("/api/stats")
+        .then((r) => r.json())
+        .then(setStats)
+        .catch(() => {});
+    };
+
+    loadStats();
+    window.addEventListener(MEDIA_SCAN_COMPLETE_EVENT, loadStats);
+    return () => window.removeEventListener(MEDIA_SCAN_COMPLETE_EVENT, loadStats);
   }, []);
 
   return <StatsContext.Provider value={stats}>{children}</StatsContext.Provider>;

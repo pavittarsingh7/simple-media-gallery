@@ -1,5 +1,3 @@
-import "server-only";
-
 import { readFile } from "fs/promises";
 import sharp from "sharp";
 import type { ImageMetadata } from "@/services/scanner/types";

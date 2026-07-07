@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { GalleryFilters, MediaItem, PaginatedResult } from "@/types";
 import type { SortOption } from "@/constants/media";
+import { MEDIA_SCAN_COMPLETE_EVENT } from "@/constants/media";
 
 interface UseGalleryOptions {
   type: "PHOTO" | "VIDEO";
@@ -69,6 +70,14 @@ export function useGallery({ type, initialSort = "newest", limit = 48 }: UseGall
       setLoading(false);
     }
   }, [fetchMedia]);
+
+  useEffect(() => {
+    const onScanComplete = () => {
+      refresh();
+    };
+    window.addEventListener(MEDIA_SCAN_COMPLETE_EVENT, onScanComplete);
+    return () => window.removeEventListener(MEDIA_SCAN_COMPLETE_EVENT, onScanComplete);
+  }, [refresh]);
 
   useEffect(() => {
     if (searchTimeout.current) clearTimeout(searchTimeout.current);

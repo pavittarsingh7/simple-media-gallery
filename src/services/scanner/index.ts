@@ -1,5 +1,3 @@
-import "server-only";
-
 import path from "path";
 import { prisma } from "@/lib/prisma";
 import { scanMediaFolders, ensureMediaDirectories } from "@/services/scanner/walker";

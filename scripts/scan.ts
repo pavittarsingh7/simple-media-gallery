@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { runMediaScan } from "../src/services/scanner";
 
 async function main() {

@@ -34,8 +34,9 @@ export function MediaCard({
   index = 0,
 }: MediaCardProps) {
   const thumb = item.thumbnails.find((t) => t.size === "md") ?? item.thumbnails[0];
-  const thumbUrl = thumb ? getMediaUrl(item.id, thumb.size) : getMediaUrl(item.id);
+  const thumbUrl = thumb ? getMediaUrl(item.id, thumb.size) : null;
   const blurData = item.metadata?.blurDataUrl;
+  const showVideoPlaceholder = item.type === "VIDEO" && !thumbUrl;
 
   if (layout === "list") {
     return (
@@ -54,16 +55,22 @@ export function MediaCard({
           onClick={onClick}
         >
           <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg">
-            <Image
-              src={thumbUrl}
-              alt={item.filename}
-              fill
-              className="object-cover"
-              sizes="64px"
-              placeholder={blurData ? "blur" : "empty"}
-              blurDataURL={blurData ?? undefined}
-            />
-            {item.type === "VIDEO" && (
+            {showVideoPlaceholder ? (
+              <div className="flex h-full w-full items-center justify-center bg-purple-500/20">
+                <Play className="h-5 w-5 text-purple-400" />
+              </div>
+            ) : (
+              <Image
+                src={thumbUrl!}
+                alt={item.filename}
+                fill
+                className="object-cover"
+                sizes="64px"
+                placeholder={blurData ? "blur" : "empty"}
+                blurDataURL={blurData ?? undefined}
+              />
+            )}
+            {item.type === "VIDEO" && !showVideoPlaceholder && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/30">
                 <Play className="h-5 w-5 fill-white text-white" />
               </div>
@@ -103,22 +110,35 @@ export function MediaCard({
         onClick={onClick}
       >
         <div className={cn("relative w-full overflow-hidden", layout === "grid" ? "h-full" : "h-auto")}>
-          <Image
-            src={thumbUrl}
-            alt={item.filename}
-            width={thumb?.width ?? 400}
-            height={thumb?.height ?? 400}
-            className={cn(
-              "w-full transition-transform duration-500 group-hover:scale-105",
-              layout === "grid" ? "h-full object-cover" : "h-auto object-cover"
-            )}
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            placeholder={blurData ? "blur" : "empty"}
-            blurDataURL={blurData ?? undefined}
-            style={{
-              backgroundColor: item.metadata?.dominantColor ?? undefined,
-            }}
-          />
+          {showVideoPlaceholder ? (
+            <div
+              className={cn(
+                "flex w-full items-center justify-center bg-gradient-to-br from-purple-500/20 to-purple-900/30",
+                layout === "grid" ? "h-full min-h-[200px]" : "min-h-[200px]"
+              )}
+            >
+              <div className="rounded-full bg-black/40 p-4">
+                <Play className="h-8 w-8 fill-white text-white" />
+              </div>
+            </div>
+          ) : (
+            <Image
+              src={thumbUrl!}
+              alt={item.filename}
+              width={thumb?.width ?? 400}
+              height={thumb?.height ?? 400}
+              className={cn(
+                "w-full transition-transform duration-500 group-hover:scale-105",
+                layout === "grid" ? "h-full object-cover" : "h-auto object-cover"
+              )}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              placeholder={blurData ? "blur" : "empty"}
+              blurDataURL={blurData ?? undefined}
+              style={{
+                backgroundColor: item.metadata?.dominantColor ?? undefined,
+              }}
+            />
+          )}
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
